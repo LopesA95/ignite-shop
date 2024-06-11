@@ -2,7 +2,7 @@ import { styled } from '../styles'
 
 const Button = styled('button', {
   color: 'white',
-  background: '$rocketseat',
+  background: '$green300',
   borderRadius: 4,
   padding: '10px',
   margin: '10px',
