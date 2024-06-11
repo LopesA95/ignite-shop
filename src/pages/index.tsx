@@ -1,9 +1,31 @@
-import { Inter } from "next/font/google"
+import { styled } from '../styles'
 
-const inter = Inter({ subsets: ["latin"] })
+const Button = styled('button', {
+  color: 'white',
+  background: '$rocketseat',
+  borderRadius: 4,
+  padding: '10px',
+  margin: '10px',
+  border: 'none',
+  cursor: 'pointer',
+
+  span: {
+    fontWeight: 'bold',
+  },
+
+  '&:hover': {
+    filter: 'brightness(0.9)',
+  }
+})
 
 export default function Home() {
   return (
-    <h1>Hello World</h1>
+    <>
+      <h1>Hello World</h1>
+      <Button>
+        <span>teste</span>
+        Clique aqui
+      </Button>
+    </>
   )
 }
