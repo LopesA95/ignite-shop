@@ -1,5 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import Stripe from 'stripe'
 import { stripe } from '../../lib/stripe'
 import { ImageContainer, ProductContainer, ProductDetails } from '../../styles/pages/product'
@@ -15,6 +16,12 @@ interface ProductProps {
 }
 
 export default function Product({ product }: ProductProps) {
+	const { isFallback } = useRouter()
+	if (isFallback) {
+		return <div>Carregando...</div>
+	}
+
+
 	if (!product) {
 		return <div>Produto não encontrado.</div>
 	}
@@ -41,13 +48,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
 	// Aqui você deve buscar os IDs dos produtos disponíveis
 	// e retornar os caminhos para os quais deseja gerar páginas estáticas
 
+
 	return {
-		paths: [
-			
-			{ params: { id: 'prod_QJoGGzxiHgvYVJ' } },
-			
-		],
-		fallback: false, // Ou 'blocking' se preferir geração no momento da solicitação
+		paths: [],
+		fallback: true,
 	}
 }
 
