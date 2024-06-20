@@ -6,7 +6,8 @@ import Stripe from "stripe"
 import { stripe } from "../lib/stripe"
 import { ImageContainer, SucessContainer } from "../styles/pages/sucess"
 
-interface SucessProps {
+
+interface SuccessProps {
 	customerName: string
 	product: {
 		name: string
@@ -14,55 +15,46 @@ interface SucessProps {
 	}
 }
 
-export default function Success({ customerName, product }: SucessProps) {
+export default function Success({ customerName, product }: SuccessProps) {
 	return (
 		<>
 			<Head>
-				<title>Compra efetuada | Ignite shop</title>
-
-				<meta name='rocbots' content='noindex' />
+				<title>Compra efetuada | Ignite Shop</title>
+				<meta name='robots' content='noindex' />
 			</Head>
 			<SucessContainer>
 				<h1>Compra efetuada!</h1>
-
 				<ImageContainer>
-
-					<Image src={product.imageUrl} width={120} height={110} alt='' />
-
+					<Image src={product.imageUrl} width={120} height={110} alt={product.name} />
 				</ImageContainer>
-
 				<p>
-					Uhuul <strong>{customerName}</strong>, sua Camiseta <strong>{product.name}</strong> ja está a caminho de sua casa.
+					Uhuul <strong>{customerName}</strong>, sua Camiseta <strong>{product.name}</strong> já está a caminho de sua casa.
 				</p>
-
 				<Link href='/'>
-					Voltar ao catalogo
+					<a>Voltar ao catálogo</a>
 				</Link>
 			</SucessContainer>
-
 		</>
 	)
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-
 	if (!query.session_id) {
 		return {
 			redirect: {
 				destination: '/',
 				permanent: false,
-
 			}
 		}
 	}
-	const sessionId = query.session_id as string
 
+	const sessionId = query.session_id as string
 	const session = await stripe.checkout.sessions.retrieve(sessionId, {
 		expand: ['line_items', 'line_items.data.price.product']
 	})
 
-	const customerName = session.customer_details.name
-	const product = session.line_items.data[0].price.product as Stripe.Product
+	const customerName = session.customer_details?.name ?? 'Cliente'
+	const product = session.line_items?.data[0].price?.product as Stripe.Product
 
 	return {
 		props: {
@@ -71,7 +63,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 				name: product.name,
 				imageUrl: product.images[0],
 			}
-
 		}
 	}
 }
