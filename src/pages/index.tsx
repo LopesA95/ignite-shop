@@ -1,10 +1,11 @@
-import 'keen-slider/keen-slider.min.css'
-import { useKeenSlider } from "keen-slider/react"
 import { GetStaticProps } from "next"
+import Head from "next/head"
 import Image from "next/image"
 import Stripe from 'stripe'
 import { stripe } from "../lib/stripe"
 
+import 'keen-slider/keen-slider.min.css'
+import { useKeenSlider } from "keen-slider/react"
 import Link from 'next/link'
 import { HomeContainer, Product } from "../styles/pages/home"
 
@@ -26,26 +27,34 @@ export default function Home({ products }: HomeProps) {
   })
 
   return (
-    <HomeContainer ref={sliderRef} className="keen-slider">
-      {Array.isArray(products) && products.length > 0 ? (
-        products.map(product => (
-          <Link href={`/product/${product.id}`} key={product.id}>
-            <Product
-              className="keen-slider__slide"
-            >
-              <Image src={product.imageUrl} width={520} height={480} alt={product.name} />
+    <>
+      <Head>
+        <title>Home | Ignite Shop</title>
 
-              <footer>
-                <strong>{product.name}</strong>
-                <span>{product.price}</span>
-              </footer>
-            </Product>
-          </Link>
-        ))
-      ) : (
-        <p>No products available</p>
-      )}
-    </HomeContainer>
+      </Head>
+
+      <HomeContainer ref={sliderRef} className="keen-slider">
+
+        {Array.isArray(products) && products.length > 0 ? (
+          products.map(product => (
+            <Link href={`/product/${product.id}`} key={product.id}>
+              <Product
+                className="keen-slider__slide"
+              >
+                <Image src={product.imageUrl} width={520} height={480} alt={product.name} />
+
+                <footer>
+                  <strong>{product.name}</strong>
+                  <span>{product.price}</span>
+                </footer>
+              </Product>
+            </Link>
+          ))
+        ) : (
+          <p>No products available</p>
+        )}
+      </HomeContainer>
+    </>
   )
 }
 
